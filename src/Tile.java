@@ -8,7 +8,7 @@ import java.awt.Color;
  * @author Antoine
  *
  */
-public class Tuile {
+public class Tile {
 	
 	int value;
 	Color color;
