@@ -10,21 +10,36 @@ import java.awt.Color;
  */
 public class Tile {
 	
-	int value;
-	Color color;
-	boolean selected;
-	boolean exist;
+	private int value;
+	private Color color;
 	
-	public void marque(){
-		selected = true;
+	public Tile(int value, Color color){
+		this.value = value;
+		this.color = color;
+		
 	}
 	
-	public void demarque() {
-		selected = false;
+	public void setValue(int value) {
+		this.value = value;
 	}
 	
-	public void supprimer() {
-		exist = false;
+	public int getValue() {
+		return this.value;
+	}
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
+	public Color getColor() {
+		return this.color;
+	}
+	
+	
+	
+	
+	public void delete() {
+		
 	}
 	
 
