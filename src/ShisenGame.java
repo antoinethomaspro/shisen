@@ -17,7 +17,7 @@ public class ShisenGame {
 		while(jeu.etape != "jeu terminé") {
 			
 			
-			jeu.setCoordonnees1(render.readAction());
+			//jeu.setCoordonnees1(render.readAction());
 			//jeu.setCoordonnees2(render.readAction());
 			
 			render.draw(jeu);

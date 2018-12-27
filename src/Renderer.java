@@ -76,81 +76,20 @@ public class Renderer {
 
 	}
 
-	public String readAction() {
-		Boolean lectureNonValide = true;
-		Boolean isAbscisse;
-		Boolean isOrdonne;
-		String saisieUtilisateur = "";
-
-		while(lectureNonValide=true) {
-			isAbscisse = false;
-			isOrdonne = false;
-			System.out.println();
-			System.out.println("Veuillez-sélectionner le chiffre de votre première tuile");
-			String abs=sc.next();
-			try {
-				int abscisses = Integer.parseInt(abs);//conversion en int
-			}
-			catch(NumberFormatException e){
-				System.out.println("Exception occurred");
-			}
-
-
-
-
-			//longueur de la saisie
-
-			if(saisieUtilisateur.length()!=2) { 
-				System.out.println("Trop ou pas assez de caractères");
-			} 
-			else {
-				lectureNonValide = false;
-			}
-			//coordonnées valide
-			//check ordonnee
-			//check abscisse
-			//pour chaque lettre saisie
-
-			for (char lettre : saisieUtilisateur.toCharArray()) { //string saisi et on veut parcourir chacune des lettres
-				//je regarde si lettre est dans mes ordonnées
-				if(new String(ordonnees).indexOf(lettre) != -1) { //on veut savoir si la lettre appartient à un tableau et pour valueof on a besion d'un string mais valueof renvoie la lettre donc compare lettre
-					isOrdonne = true;
-					System.out.println("ordonne ok");
-				}
-				else {
-					System.out.println("ordonnee pas bon");
-					//et si lettre est dans mes abscisses
-
-				}
-
-			}
-
-			for (char chiffre : saisieUtilisateur.toCharArray()) { //string saisi et on veut parcourir chacune des lettres
-				//je regarde si lettre est dans mes ordonnées
-				int temp = Character.getNumericValue(chiffre);//conversion en int
-				if (temp <= Board.NB_COLUMNS && temp >= 0) { //on veut savoir si la lettre appartient à un tableau et pour valueof on a besion d'un string mais valueof renvoie la lettre donc compare lettre
-					isAbscisse = true;
-					System.out.println("abscisse ok");
-				}
-				else {
-					System.out.println("abscisse pas bon");
-				}
-
-			}
-
-			if (isAbscisse && isOrdonne) {
-				lectureNonValide = false;
-			}
-			else {
-				System.out.println("Il me faut une lettre et un chiffre");
-			}
-
-		}//end while
-
-
-		System.out.println("Vous avez choisi la tuile : " + sc);
-		return saisieUtilisateur;
-
-
+	public int[] readAction() {
+		System.out.println("veuillez sélectionner tuile ex: A2");
+		String saisie = sc.nextLine();//récupère A2
+		char lettre = saisie.charAt(0);
+		int chiffre = Integer.parseInt(saisie.substring(1));
+		if(lettre < 65 || lettre >65 + Board.NB_LINES) {
+			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));
+		}
+		if(chiffre < 1 || chiffre > Board.NB_COLUMNS) {
+			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));// à changer
+		}
+		
+		int[] result = {lettre , chiffre};
+		return result;
+		
 	}
 }
