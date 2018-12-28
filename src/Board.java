@@ -2,30 +2,24 @@ import java.awt.Color;
 
 public class Board {
 	Tile tilesArray[][];
-	Tile selectedTiles[];
+	
 	String etape;
-	private String coordonnees1;
-	private String coordonnees2;
 
 
-	public String getCoordonnees1() {
-		return coordonnees1;
-	}
 
-	public String getCoordonnees2() {
-		return coordonnees2;
-	}
-	
-	public void setCoordonnees1(String value) {
-		coordonnees1 = value;
-	}
-	
-	public void setCoordonnees2(String value) {
-		coordonnees2 = value;
-	}
+
 
 	public final static int NB_LINES = 12;
 	public final static int NB_COLUMNS = 24;
+
+
+
+
+
+	public Board(){
+		this.tilesArray = new Tile[12][24];
+		this.etape = "en cours";
+	}
 
 	private static int randomWithRange(int min, int max)
 	{
@@ -33,15 +27,11 @@ public class Board {
 		return (int)(Math.random() * range) + min;
 	}	
 
-
-
-	public Board(){
-		this.tilesArray = new Tile[12][24];
-		this.selectedTiles = new Tile[2];
-		this.etape = "en cours";
-
+	public Tile getTile(int x, int y) { //retourne une tuile aux coordonnées données
+		return tilesArray[y][x];
 	}
-	public Tile[][] getTilesArray() {
+	
+	public Tile[][] getTilesArray() { //retourne tableau de deux tuiles;
 		return tilesArray;
 	}
 
@@ -51,7 +41,11 @@ public class Board {
 				swapRandomMatrix(tilesArray, i, j);
 			}
 		}
-
+		for (int i = 0; i < tilesArray.length; i++) {
+			for (int j = 0; j < tilesArray[0].length; j++) {
+				tilesArray[i][j];
+			}
+		}
 
 	}
 
@@ -63,8 +57,8 @@ public class Board {
 		matrix[rdni][rdnj] = temp;
 	}
 
-
-	public void init() {   //but de cette méthode : initialiser un tableau de toutes les tuiles possibles 
+	 //but de cette méthode : initialiser un tableau de toutes les tuiles possibles 
+	public void init() {  
 
 		int switchcolor = 0; //couleur 0 = bleu
 		int switchvalue = 1; //les tuiles sont numérotées de 1 à 9
@@ -75,10 +69,9 @@ public class Board {
 			for (int j = 0; j < this.tilesArray[i].length; j++) { //On parourt TilesArray pour modifier la valeur de chaque tuile
 
 
-				Tile a = new Tile(switchvalue, getDynamicColor(switchcolor)); //création d'une "tuile a" qui a des arguments dynamiques
+				Tile a = new Tile(switchvalue, getDynamicColor(switchcolor), j, i); //création d'une "tuile a" qui a des arguments dynamiques
 				this.tilesArray[i][j] = a; // on affecte la tuile créé 
-
-
+				
 				if ((cpt%8)==0) {
 					switchvalue++;
 				}
@@ -116,6 +109,25 @@ public class Board {
 			break;
 		}
 		return dynamic_color;
+	}
+
+	//enregistre les tuiles sélectionnées par l'utilisateur dans un tableau comportant 2 tuiles
+	
+	public void delete(Tile tuileadetruire) {
+		tilesArray[tuileadetruire.getY()][tuileadetruire.getX()] = null;
+	}
+	
+	public void collapse() {
+		System.out.println("tableau modifié");
+	}
+
+	public void actionOnSelectedTiles(Tile a, Tile b) {
+		if (a.equals(b) && a.isNear(b)){
+		a.delete();
+		b.delete();
+		
+		}
+		
 	}
 
 

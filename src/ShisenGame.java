@@ -14,11 +14,12 @@ public class ShisenGame {
 		Renderer render = new Renderer();
 		render.draw(jeu);
 
-		while(jeu.etape != "jeu terminé") {
-			
-			
-			//jeu.setCoordonnees1(render.readAction());
-			//jeu.setCoordonnees2(render.readAction());
+		while(true) {
+			Tile firstTile = render.readAction(jeu); //création d'une variable coordonnees1 affectée par ce que l'utilisateur entre. 
+			Tile secondTile = render.readAction(jeu); 
+	
+			jeu.actionOnSelectedTiles(firstTile, secondTile);
+			jeu.collapse(); // on modifie le tableau
 			
 			render.draw(jeu);
 		}

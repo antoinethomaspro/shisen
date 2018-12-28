@@ -10,6 +10,9 @@ public class Renderer {
 	public static final String ANSI_GREEN = "\u001B[32m";
 	public static final String ANSI_YELLOW = "\u001B[33m";
 	public static final String ANSI_BLUE = "\u001B[34m";
+	public static final String ANSI_WHITE = "\u001B[37m";
+
+
 	private Scanner sc;
 	char[] ordonnees = new char[Board.NB_LINES];
 	int[] abscisses = new int[Board.NB_COLUMNS];
@@ -52,44 +55,54 @@ public class Renderer {
 			ordonnee++;
 
 			for (int j = 0; j < mat[i].length; j++) {
-
+				Tile a = mat[i][j];
 				if (j>0) System.out.print("\t");
 
-				String color = "";
-				if(mat[i][j].getColor() == Color.blue) {
-					color = ANSI_BLUE;
-				}
-				if(mat[i][j].getColor() == Color.red) {
-					color = ANSI_RED;
-				}
-				if(mat[i][j].getColor() == Color.yellow) {
-					color = ANSI_YELLOW;
-				}
-				if(mat[i][j].getColor() == Color.green) {
-					color = ANSI_GREEN;
-				}
+				String color =  ANSI_WHITE; //on affiche un 0 blanc si une tuile a été détruite auparavant
 
-				System.out.print(color+ mat[i][j].getValue() + ANSI_RESET);
+				if(a != null) {
+					if(a.getColor() == Color.blue) {
+						color = ANSI_BLUE;
+					}
+					if(a.getColor() == Color.red) {
+						color = ANSI_RED;
+					}
+					if(a.getColor() == Color.yellow) {
+						color = ANSI_YELLOW;
+					}
+					if(a.getColor() == Color.green) {
+						color = ANSI_GREEN;
+					}
+				}
+				System.out.print(color+ (a == null ? "0" : a.getValue()) + ANSI_RESET); //si a est null alors je renvoie 0 sinon je renvoie sa valeur
 			}
 			System.out.println("}");
 		}
 
 	}
 
-	public int[] readAction() {
+	//traduit ce que l'utilisateur entre en un tableau de deux éléments
+	//ce qui ressort de la méthode c'est l'index de tilesarray
+	public Tile readAction(Board jeu) {
 		System.out.println("veuillez sélectionner tuile ex: A2");
 		String saisie = sc.nextLine();//récupère A2
 		char lettre = saisie.charAt(0);
 		int chiffre = Integer.parseInt(saisie.substring(1));
 		if(lettre < 65 || lettre >65 + Board.NB_LINES) {
-			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));
+			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));//throw new : retourne une nouvelle exception. arrête l'action en affichant un message
 		}
 		if(chiffre < 1 || chiffre > Board.NB_COLUMNS) {
-			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));// à changer
+			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(Board.NB_COLUMNS));// à changer
 		}
-		
-		int[] result = {lettre , chiffre};
-		return result;
-		
+		int x = chiffre;
+		int y = lettre -65;
+		Tile selected = jeu.getTile(x , y);
+		if (selected == null) {
+			System.out.println("Tuile déjà détruite");
+			return readAction(jeu); //relance la saisie si la tuile est inexistante.
+		}
+		return selected;
+
+
 	}
 }
