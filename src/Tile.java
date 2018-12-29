@@ -14,7 +14,7 @@ public class Tile {
 	private Color color;
 	private int x;
 	private int y;
-
+    
 
 
 	public Tile(int value, Color color, int x, int y){
@@ -75,21 +75,14 @@ public class Tile {
 
 	//méthode comparer les tuiles sélectionnéees : les tuiles doivent être à une certaine distance
 	public boolean isNear(Tile a) {
-		int total1 = this.x + this.y;
-		int total2 = a.getX() + a.getY();
-		int soustraction = total1 - total2;
-		if ((Math.abs(soustraction)) <= 3) {
+		int total1 = Math.abs(this.x - a.getX());
+		int total2 = Math.abs(this.y - a.getY());
+		int addition = total1 + total2;
+		if (addition <= 3) {
 			return true;
 		}
 		else return false;
 
 	}
-
-	public void delete() {
-
-	}
-
-
-
 
 }
