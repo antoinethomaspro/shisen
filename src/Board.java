@@ -2,19 +2,11 @@ import java.awt.Color;
 
 public class Board {
 	Tile tilesArray[][];
-	
+
 	String etape;
-
-
-
-
 
 	public final static int NB_LINES = 12;
 	public final static int NB_COLUMNS = 24;
-
-
-
-
 
 	public Board(){
 		this.tilesArray = new Tile[12][24];
@@ -30,7 +22,7 @@ public class Board {
 	public Tile getTile(int x, int y) { //retourne une tuile aux coordonnées données
 		return tilesArray[y][x];
 	}
-	
+
 	public Tile[][] getTilesArray() { //retourne tableau de deux tuiles;
 		return tilesArray;
 	}
@@ -41,12 +33,19 @@ public class Board {
 				swapRandomMatrix(tilesArray, i, j);
 			}
 		}
+		setAllcoordinates();
+	}
+
+	// permet de réaffecter les coordonnées de chaque tuile
+	public void setAllcoordinates() {
 		for (int i = 0; i < tilesArray.length; i++) {
 			for (int j = 0; j < tilesArray[0].length; j++) {
-				tilesArray[i][j];
+				if(tilesArray[i][j] != null) {
+					tilesArray[i][j].setX(j); //attention les i = y, les j = x. On va modifier la valeur des tuiles.
+					tilesArray[i][j].setY(i);
+				}
 			}
 		}
-
 	}
 
 	private static void swapRandomMatrix(Tile[][] matrix, int i, int j) {
@@ -57,7 +56,7 @@ public class Board {
 		matrix[rdni][rdnj] = temp;
 	}
 
-	 //but de cette méthode : initialiser un tableau de toutes les tuiles possibles 
+	//but de cette méthode : initialiser un tableau de toutes les tuiles possibles 
 	public void init() {  
 
 		int switchcolor = 0; //couleur 0 = bleu
@@ -71,7 +70,7 @@ public class Board {
 
 				Tile a = new Tile(switchvalue, getDynamicColor(switchcolor), j, i); //création d'une "tuile a" qui a des arguments dynamiques
 				this.tilesArray[i][j] = a; // on affecte la tuile créé 
-				
+
 				if ((cpt%8)==0) {
 					switchvalue++;
 				}
@@ -112,22 +111,37 @@ public class Board {
 	}
 
 	//enregistre les tuiles sélectionnées par l'utilisateur dans un tableau comportant 2 tuiles
-	
+
 	public void delete(Tile tuileadetruire) {
 		tilesArray[tuileadetruire.getY()][tuileadetruire.getX()] = null;
 	}
-	
+
 	public void collapse() {
-		System.out.println("tableau modifié");
+		for (int j = 0; j < tilesArray[0].length; j++) { //parcour les colonnes
+			int nbDown = 0; //valeur de l'écroulement de la colonne
+			for (int i = NB_LINES -1; i >= 0 ; i--) { //parcour les lignes de la colonne
+				if(tilesArray[i][j]==null) {
+					nbDown++;
+				}else {
+					if(nbDown>0) {
+					tilesArray[i+nbDown][j]=tilesArray[i][j];//remplace la tuile actuellement visée et on l'écoule
+					tilesArray[i][j] = null;
+					}
+				}
+			}
+		}
+		setAllcoordinates();//remet les bonnes coordonnées pour chaque tuile (x et y). 
 	}
 
 	public void actionOnSelectedTiles(Tile a, Tile b) {
 		if (a.equals(b) && a.isNear(b)){
-		a.delete();
-		b.delete();
-		
+			delete(a);
+			delete(b);
+			System.out.println("tuiles détruites");
 		}
-		
+		else{
+			System.out.println("ça a pas marché");
+		}
 	}
 
 
