@@ -89,10 +89,12 @@ public class Renderer {
 		char lettre = saisie.charAt(0);
 		int chiffre = Integer.parseInt(saisie.substring(1));
 		if(lettre < 65 || lettre >65 + Board.NB_LINES) {
-			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));//throw new : retourne une nouvelle exception. arrête l'action en affichant un message
+			System.out.println("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));//throw new : retourne une nouvelle exception. arrête l'action en affichant un message
+			return readAction(jeu);	
 		}
-		if(chiffre < 1 || chiffre > Board.NB_COLUMNS) {
-			throw new IllegalArgumentException("lettre non comprise entre A et "+ (char)(Board.NB_COLUMNS));// à changer
+		if(chiffre < 0 || chiffre > Board.NB_COLUMNS -1) {
+			System.out.println("lettre non comprise entre A et "+ (char)(Board.NB_COLUMNS));
+			return readAction(jeu);
 		}
 		int x = chiffre;
 		int y = lettre -65;
