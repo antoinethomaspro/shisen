@@ -7,8 +7,8 @@ public class Board {
 
 	String etape;
 	//paramétrable
-	public final static int NB_LINES = 3;
-	public final static int NB_COLUMNS = 5;
+	public final static int NB_LINES = 2;
+	public final static int NB_COLUMNS = 4;
 	public final static int NB_NUMBERS = 9;
 	//non paramétrable
 	public final static int NB_MAXCOLORS = 4;
@@ -16,11 +16,10 @@ public class Board {
 
 	//ce constructeur peut rejeter une exception
 	public Board() throws Exception{
-		float a = (NB_LINES*NB_COLUMNS)/NB_SAMETILES;
-		if( a != (int)a) {
+		if( NB_LINES*NB_COLUMNS%NB_SAMETILES !=0) {
 			throw new Exception("Impossible de créer le jeu : nombre de lignes/colonnes incorrect");
 		}
-		
+
 		this.tilesArray = new Tile[NB_LINES][NB_COLUMNS];
 		this.etape = "en cours";
 	}
@@ -128,28 +127,40 @@ public class Board {
 	}
 
 	public void collapse() {
-		for (int j = 0; j < tilesArray[0].length; j++) { //parcour les colonnes
-			int nbDown = 0; //valeur de l'écroulement de la colonne
-			for (int i = NB_LINES -2; i >= 0 ; i--) { //parcour les lignes de la colonne on commence à l'avant dernière ligne
-				
-				if(tilesArray[i+1][j]==null) { //on check la tuile d'en dessous
-					for (int k = NB_LINES-2; k >=0; k--) {
-						swapTilesMatrix(tilesArray, k, j, k +1, j);
+
+		// Ecroullement des tuiles
+		for (int j = 0; j <= NB_COLUMNS - 1; j++) { // on parcours chaque colonne
+			for (int i = NB_LINES - 1; i >= 1 ; i--) { // on parcours chaque lignes de la fin jusqu'au début + 1
+
+				if(tilesArray[i][j]==null) { // si une tuille dans la colonne est vide il va y avoir un écroullement
+					// nous allons calculer l'écart de l'écoulement
+					int k = i - 1; // k est l'indice de la tuile qui va s'écrouler, on l'initialise à la tuile juste au dessus
+					while (k > 0 && tilesArray[k][j] == null) { // si la tuile à l'indice k est aussi détruite
+						k--; // on prends la tuile encore au dessus
 					}
+					swapTilesMatrix(tilesArray, i, j, k, j); // on swap la tuile actuel avec celle à l'indice ligne k
 				} 
-				
-//				if(nbDown == NB_LINES && j < NB_COLUMNS -1) { //colapse des colonnes on ne veut pas swap si on est à la dernière colonne du tableau sinon out of range
-//					for (int k = 0; k < NB_LINES-1; k++) { 
-//						swapTilesMatrix(tilesArray, k, j, k, j+1);//on utilise swap pour déplacer les colonnes quand toute une colonne a été détruite
-//					}
-//				}
 			}
 		}
-		setAllcoordinates();//remet les bonnes coordonnées pour chaque tuile (x et y). 
+
+		// Décalage des colonnes
+		for (int j = 0; j <= NB_COLUMNS - 2; j++) { // on parcours chaque colonnes du début jusqu'à la fin - 1
+
+			if (tilesArray[NB_LINES - 1][j] == null) { // si une colonne est vide il va y avoir un décalage de colonne
+				int k = j+1; // k est l'indice de la tuile de la colonne qui va décaler, on l'initialise à la colonne juste à gauche
+				while (k < NB_COLUMNS - 1 && tilesArray[NB_LINES - 1][k] == null) { // si la colonne à l'indice k est aussi détruite
+					k++; // on prends la colonne encore à gauche
+				}
+				for (int l = 0; l <= NB_LINES-1; l++) {  // pour chaque ligne dans la colonne
+					swapTilesMatrix(tilesArray, l, j, l, k); // on swap les tuiles celle de la colonne à l'indice k
+				}
+			}
+		}
+		setAllcoordinates();//remet les bonnes coordonnees pour chaque tuile (x et y). 
 	}
 
 	public void actionOnSelectedTiles(Tile a, Tile b) {
-		if (a.equals(b) && a.isNear(b)){
+		if (a.equals(b) && a.isNear(b) && (a != b)){//on compare les adresses pour savoir si l'utilisateur n'a pas sélectionné la même tuile deux fois
 			delete(a);
 			delete(b);
 			System.out.println("tuiles détruites");
@@ -157,6 +168,14 @@ public class Board {
 		else{
 			System.out.println("ça a pas marché");
 		}
+	}
+
+	//si la dernière ligne de la première colonne est nulle ça signifie qu'on a gagné!
+	public boolean isFinished() {
+		if(tilesArray[NB_LINES-1][0] != null) { 
+			return false;
+		}
+		return true;
 	}
 
 

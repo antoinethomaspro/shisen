@@ -1,4 +1,4 @@
-
+//gestion game over?
 
 public class ShisenGame {
 
@@ -21,7 +21,7 @@ public class ShisenGame {
 		Renderer render = new Renderer();
 		render.draw(jeu);
 
-		while(true) {
+		while(jeu.isFinished()==false) {
 			Tile firstTile = render.readAction(jeu); //création d'une variable coordonnees1 affectée par ce que l'utilisateur entre. 
 			Tile secondTile = render.readAction(jeu); 
 	
@@ -31,6 +31,7 @@ public class ShisenGame {
 			render.draw(jeu);
 		}
 
+		System.out.println("Jeu terminé");
 
 
 
