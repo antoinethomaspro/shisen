@@ -1,4 +1,9 @@
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JButton;
 
 /**
  * 
@@ -8,7 +13,7 @@ import java.awt.Color;
  * @author Antoine
  *
  */
-public class Tile {
+public class Tile extends JButton implements MouseListener {
 
 	private int value;
 	private Color color;
@@ -18,26 +23,36 @@ public class Tile {
 
 
 	public Tile(int value, Color color, int x, int y){
+		super(Integer.toString(value));
+		Font police = new Font("Tahoma", Font.BOLD, 16);
+		this.setFont(police);
+		this.setBackground(color);
+		this.addMouseListener(this);
+		
 		this.value = value;
 		this.color = color;
 		this.x = x;
 		this.y = y;
+		
+		
+		
+		
 
 	}
 
-	public int getX() {
+	public int getGridX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setGridX(int x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public int getGridY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setGridY(int y) {
 		this.y = y;
 	}
 
@@ -83,6 +98,36 @@ public class Tile {
 		}
 		else return false;
 
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

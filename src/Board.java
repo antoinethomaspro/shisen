@@ -1,8 +1,15 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 
 
-public class Board {
+public class Board  {
 	Tile tilesArray[][];
 
 	String etape;
@@ -16,6 +23,7 @@ public class Board {
 
 	//ce constructeur peut rejeter une exception
 	public Board() throws Exception{
+		
 		if( NB_LINES*NB_COLUMNS%NB_SAMETILES !=0) {
 			throw new Exception("Impossible de créer le jeu : nombre de lignes/colonnes incorrect");
 		}
@@ -55,8 +63,8 @@ public class Board {
 		for (int i = 0; i < tilesArray.length; i++) {
 			for (int j = 0; j < tilesArray[0].length; j++) {
 				if(tilesArray[i][j] != null) {
-					tilesArray[i][j].setX(j); //attention les i = y, les j = x. On va modifier la valeur des tuiles.
-					tilesArray[i][j].setY(i);
+					tilesArray[i][j].setGridX(j); //attention les i = y, les j = x. On va modifier la valeur des tuiles.
+					tilesArray[i][j].setGridY(i);
 				}
 			}
 		}
@@ -177,6 +185,7 @@ public class Board {
 		}
 		return true;
 	}
+
 
 
 
