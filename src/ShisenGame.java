@@ -55,7 +55,7 @@ public class ShisenGame {
 		jeu.init();
 		jeu.shuffleArray();
 		RendererSwing render = new RendererSwing(jeu);
-		render.draw();
+		
 
 		while(jeu.isFinished()==false) {
 			

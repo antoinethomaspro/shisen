@@ -4,6 +4,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
+import javax.swing.border.LineBorder;
+
+import javafx.scene.shape.Line;
 
 /**
  * 
@@ -28,6 +31,7 @@ public class Tile extends JButton implements MouseListener {
 		this.setFont(police);
 		this.setBackground(color);
 		this.addMouseListener(this);
+		this.setBorder(new LineBorder(Color.BLACK, 1));
 		
 		this.value = value;
 		this.color = color;
@@ -35,7 +39,9 @@ public class Tile extends JButton implements MouseListener {
 		this.y = y;
 		
 		
-		
+		//boolean  : quselectand on clique sur une tuile ça change le boolean select. 
+		//déselectionne si on clique sur une autre tuile, impossibilité de sélectionner plusieurs tuiles...
+		//méthode getselected tiles pour savoir le nombre de tuile sélectionnées. 
 		
 
 	}
@@ -48,7 +54,7 @@ public class Tile extends JButton implements MouseListener {
 		this.x = x;
 	}
 
-	public int getGridY() {
+	public int getGridY() { //on a renommé getX en getGridX car c'était une méthode déjà utilisé dans JComponent
 		return y;
 	}
 
@@ -90,8 +96,8 @@ public class Tile extends JButton implements MouseListener {
 
 	//méthode comparer les tuiles sélectionnéees : les tuiles doivent être à une certaine distance
 	public boolean isNear(Tile a) {
-		int total1 = Math.abs(this.x - a.getX());
-		int total2 = Math.abs(this.y - a.getY());
+		int total1 = Math.abs(this.x - a.getGridX());
+		int total2 = Math.abs(this.y - a.getGridY());
 		int addition = total1 + total2;
 		if (addition <= 3) {
 			return true;
@@ -100,9 +106,15 @@ public class Tile extends JButton implements MouseListener {
 
 	}
 
+	
+	
+	
+	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+	
+		
 		
 	}
 

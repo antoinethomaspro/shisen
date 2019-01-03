@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import javafx.scene.control.skin.TitledPaneSkin;
+
 
 
 public class Board  {
@@ -14,16 +16,25 @@ public class Board  {
 
 	String etape;
 	//paramétrable
-	public final static int NB_LINES = 2;
-	public final static int NB_COLUMNS = 4;
+	public final static int NB_LINES = 12;
+	public final static int NB_COLUMNS = 24;
 	public final static int NB_NUMBERS = 9;
 	//non paramétrable
 	public final static int NB_MAXCOLORS = 4;
 	public final static int NB_SAMETILES = 8;
 
+	//nouvel attribut (swing) 
+	private Tile tileSelected;
+
+
+	
+
 	//ce constructeur peut rejeter une exception
 	public Board() throws Exception{
-		
+
+		//initialisation de tileSelected
+		this.tileSelected = null;
+
 		if( NB_LINES*NB_COLUMNS%NB_SAMETILES !=0) {
 			throw new Exception("Impossible de créer le jeu : nombre de lignes/colonnes incorrect");
 		}
@@ -131,7 +142,7 @@ public class Board  {
 	//enregistre les tuiles sélectionnées par l'utilisateur dans un tableau comportant 2 tuiles
 
 	public void delete(Tile tuileadetruire) {
-		tilesArray[tuileadetruire.getY()][tuileadetruire.getX()] = null;
+		tilesArray[tuileadetruire.getGridY()][tuileadetruire.getGridX()] = null;
 	}
 
 	public void collapse() {
@@ -186,7 +197,12 @@ public class Board  {
 		return true;
 	}
 
-
-
+	public Tile getTileSelected() {
+		return tileSelected;
+	}
+	
+	public void setTileSelected(Tile tileSelected) {
+		this.tileSelected = tileSelected;
+	}
 
 }
