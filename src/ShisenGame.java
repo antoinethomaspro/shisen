@@ -34,7 +34,7 @@ public class ShisenGame {
 			Tile secondTile = render.readAction(); 
 
 			jeu.actionOnSelectedTiles(firstTile, secondTile);
-			jeu.collapse(); // on modifie le tableau
+			
 
 			render.draw();
 		}
@@ -57,16 +57,7 @@ public class ShisenGame {
 		RendererSwing render = new RendererSwing(jeu);
 		
 
-		while(jeu.isFinished()==false) {
-			
-
-			
-			jeu.collapse(); // on modifie le tableau
-
-			
-		}
-
-		System.out.println("Jeu terminé");
+		
 	}
 
 }

@@ -16,22 +16,22 @@ import javafx.scene.shape.Line;
  * @author Antoine
  *
  */
-public class Tile extends JButton implements MouseListener {
+public class Tile extends JButton  {
 
 	private int value;
 	private Color color;
 	private int x;
 	private int y;
+	boolean deleted;
+	
     
-
-
 	public Tile(int value, Color color, int x, int y){
 		super(Integer.toString(value));
 		Font police = new Font("Tahoma", Font.BOLD, 16);
 		this.setFont(police);
 		this.setBackground(color);
-		this.addMouseListener(this);
 		this.setBorder(new LineBorder(Color.BLACK, 1));
+		this.deleted = false;
 		
 		this.value = value;
 		this.color = color;
@@ -45,6 +45,11 @@ public class Tile extends JButton implements MouseListener {
 		
 
 	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
 
 	public int getGridX() {
 		return x;
@@ -106,40 +111,22 @@ public class Tile extends JButton implements MouseListener {
 
 	}
 
-	
-	
-	
-	
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	
-		
+	public void delete() {
+		setBackground(Color.WHITE);
+		setText("");
+		deleted = true;
+		repaint();
+		revalidate();
 		
 	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+	
+	public void select() {
+		setBorder(new LineBorder(Color.BLACK, 10));
+	}
+	
+	public void deselect() {
+		setBorder(new LineBorder(Color.BLACK, 1));
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

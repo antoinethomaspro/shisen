@@ -57,26 +57,26 @@ public class RendererASCII {
 			ordonnee++;
 
 			for (int j = 0; j < mat[i].length; j++) {
-				Tile a = mat[i][j];
+				Tile tileToDisplay = mat[i][j];
 				if (j>0) System.out.print("\t");
 
 				String color =  ANSI_WHITE; //on affiche un 0 blanc si une tuile a été détruite auparavant
 
-				if(a != null) {
-					if(a.getColor() == Color.blue) {
+				if(tileToDisplay != null) {
+					if(tileToDisplay.getColor() == Color.blue) {
 						color = ANSI_BLUE;
 					}
-					if(a.getColor() == Color.red) {
+					if(tileToDisplay.getColor() == Color.red) {
 						color = ANSI_RED;
 					}
-					if(a.getColor() == Color.yellow) {
+					if(tileToDisplay.getColor() == Color.yellow) {
 						color = ANSI_YELLOW;
 					}
-					if(a.getColor() == Color.green) {
+					if(tileToDisplay.getColor() == Color.green) {
 						color = ANSI_GREEN;
 					}
 				}
-				System.out.print(color+ (a == null ? "0" : a.getValue()) + ANSI_RESET); //si a est null alors je renvoie 0 sinon je renvoie sa valeur
+				System.out.print(color+ (tileToDisplay.isDeleted() ? "0" : tileToDisplay.getValue()) + ANSI_RESET); //si a est null alors je renvoie 0 sinon je renvoie sa valeur
 			}
 			System.out.println("}");
 		}
@@ -100,12 +100,12 @@ public class RendererASCII {
 		}
 		int x = chiffre;
 		int y = lettre -65;
-		Tile selected = board.getTile(x , y);
-		if (selected == null) {
+		Tile selectedTile = board.getTile(x , y);
+		if (selectedTile.isDeleted()) {
 			System.out.println("Tuile déjà détruite");
 			return readAction(); //relance la saisie si la tuile est inexistante.
 		}
-		return selected;
+		return selectedTile;
 
 
 	}
