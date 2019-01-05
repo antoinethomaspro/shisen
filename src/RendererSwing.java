@@ -63,46 +63,6 @@ public class RendererSwing extends JFrame implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		Tile tile = (Tile)e.getSource(); //récupère la référence de la tuile cliquée
-		//on veut savoir si il y a déjà une tuile de sélectionnée. 
-		//si c'est la même tuile qu'on a déjà sélectionné, on met tileSelected à null et on enlève le setborder. 
-		if (!tile.isDeleted()) {
-
-
-			if(board.getTileSelected()==null) {
-				board.setTileSelected(tile);
-				tile.select();
-			}
-			else {
-				if(board.getTileSelected() == tile) {
-					board.setTileSelected(null);
-					tile.deselect();
-				}
-				else {
-					if(board.actionOnSelectedTiles(board.getTileSelected(), tile)) { // si modifié
-//						draw();
-					}
-					tile.deselect();
-					board.getTileSelected().deselect();
-					//tile.setBorder(new LineBorder(Color.BLACK, 1));
-					 board.setTileSelected(null);
-				}
-			}
-		} else {
-			System.out.println("La tuile selectionnée est nulle.");
-		}
-		
-		draw();
-		
-		revalidate();
-		repaint();
-		zone.updateUI();
-		
-		if (board.isFinished()) {
-			javax.swing.JOptionPane.showMessageDialog(null,"Partie terminée"); 
-			dispose();
-		}
 		
 
 		//si c'est le cas on compare tile et la tuile déjà sélectionnée, puis on remet tileSelected à null. 
@@ -121,6 +81,46 @@ public class RendererSwing extends JFrame implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
+		System.out.println("clicked");
+		Tile tile = (Tile)e.getSource(); //récupère la référence de la tuile cliquée
+		//on veut savoir si il y a déjà une tuile de sélectionnée. 
+		//si c'est la même tuile qu'on a déjà sélectionné, on met tileSelected à null et on enlève le setborder. 
+		if (!tile.isDeleted()) {
+
+
+			if(board.getTileSelected()==null) {
+				board.setTileSelected(tile);
+				tile.select();
+			}
+			else {
+				if(board.getTileSelected() == tile) {
+					board.setTileSelected(null);
+					tile.deselect();
+				}
+				else {
+					if(board.actionOnSelectedTiles(board.getTileSelected(), tile)) { // si modifié
+						//						draw();
+					}
+					tile.deselect();
+					board.getTileSelected().deselect();
+					//tile.setBorder(new LineBorder(Color.BLACK, 1));
+					board.setTileSelected(null);
+				}
+			}
+		} else {
+			System.out.println("La tuile selectionnée est nulle.");
+		}
+
+		draw();
+
+		revalidate();
+		repaint();
+		zone.updateUI();
+
+		if (board.isFinished()) {
+			javax.swing.JOptionPane.showMessageDialog(null,"Partie terminée"); 
+			dispose();
+		}
 
 	}
 
