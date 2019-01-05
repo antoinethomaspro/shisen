@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 
 
-public class Renderer {
+public class RendererASCII {
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
@@ -16,11 +16,13 @@ public class Renderer {
 	private Scanner sc;
 	char[] ordonnees = new char[Board.NB_LINES];
 	int[] abscisses = new int[Board.NB_COLUMNS];
+	Board board;	
 
 
 
-
-	public Renderer() {
+	public RendererASCII(Board board) {
+		
+		this.board = board;
 		sc = new Scanner(System.in);
 
 		//création d'un tableau pour les ordonnes
@@ -34,7 +36,7 @@ public class Renderer {
 		}
 	}
 
-	public void draw(Board board) {
+	public void draw() {
 		char ordonnee = 65;
 		Tile mat[][] = board.getTilesArray();
 
@@ -55,26 +57,26 @@ public class Renderer {
 			ordonnee++;
 
 			for (int j = 0; j < mat[i].length; j++) {
-				Tile a = mat[i][j];
+				Tile tileToDisplay = mat[i][j];
 				if (j>0) System.out.print("\t");
 
 				String color =  ANSI_WHITE; //on affiche un 0 blanc si une tuile a été détruite auparavant
 
-				if(a != null) {
-					if(a.getColor() == Color.blue) {
+				if(tileToDisplay != null) {
+					if(tileToDisplay.getColor() == Color.blue) {
 						color = ANSI_BLUE;
 					}
-					if(a.getColor() == Color.red) {
+					if(tileToDisplay.getColor() == Color.red) {
 						color = ANSI_RED;
 					}
-					if(a.getColor() == Color.yellow) {
+					if(tileToDisplay.getColor() == Color.yellow) {
 						color = ANSI_YELLOW;
 					}
-					if(a.getColor() == Color.green) {
+					if(tileToDisplay.getColor() == Color.green) {
 						color = ANSI_GREEN;
 					}
 				}
-				System.out.print(color+ (a == null ? "0" : a.getValue()) + ANSI_RESET); //si a est null alors je renvoie 0 sinon je renvoie sa valeur
+				System.out.print(color+ (tileToDisplay.isDeleted() ? "0" : tileToDisplay.getValue()) + ANSI_RESET); //si a est null alors je renvoie 0 sinon je renvoie sa valeur
 			}
 			System.out.println("}");
 		}
@@ -83,27 +85,27 @@ public class Renderer {
 
 	//traduit ce que l'utilisateur entre en un tableau de deux éléments
 	//ce qui ressort de la méthode c'est l'index de tilesarray
-	public Tile readAction(Board jeu) {
+	public Tile readAction() {
 		System.out.println("veuillez sélectionner tuile ex: A2");
 		String saisie = sc.nextLine();//récupère A2
 		char lettre = saisie.charAt(0);
 		int chiffre = Integer.parseInt(saisie.substring(1));
 		if(lettre < 65 || lettre >65 + Board.NB_LINES) {
 			System.out.println("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));//throw new : retourne une nouvelle exception. arrête l'action en affichant un message
-			return readAction(jeu);	
+			return readAction();	
 		}
 		if(chiffre < 0 || chiffre > Board.NB_COLUMNS -1) {
 			System.out.println("lettre non comprise entre A et "+ (char)(Board.NB_COLUMNS));
-			return readAction(jeu);
+			return readAction();
 		}
 		int x = chiffre;
 		int y = lettre -65;
-		Tile selected = jeu.getTile(x , y);
-		if (selected == null) {
+		Tile selectedTile = board.getTile(x , y);
+		if (selectedTile.isDeleted()) {
 			System.out.println("Tuile déjà détruite");
-			return readAction(jeu); //relance la saisie si la tuile est inexistante.
+			return readAction(); //relance la saisie si la tuile est inexistante.
 		}
-		return selected;
+		return selectedTile;
 
 
 	}

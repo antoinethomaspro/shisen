@@ -1,21 +1,41 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
+import javafx.scene.control.skin.TitledPaneSkin;
 
 
 
-public class Board {
+public class Board  {
 	Tile tilesArray[][];
 
 	String etape;
 	//paramétrable
-	public final static int NB_LINES = 2;
-	public final static int NB_COLUMNS = 4;
+	public final static int NB_LINES = 12;
+	public final static int NB_COLUMNS = 24;
 	public final static int NB_NUMBERS = 9;
 	//non paramétrable
 	public final static int NB_MAXCOLORS = 4;
 	public final static int NB_SAMETILES = 8;
 
+	//nouvel attribut (swing) 
+	private Tile tileSelected;
+
+
+	
+
 	//ce constructeur peut rejeter une exception
 	public Board() throws Exception{
+
+		//initialisation de tileSelected
+		this.tileSelected = null;
+
 		if( NB_LINES*NB_COLUMNS%NB_SAMETILES !=0) {
 			throw new Exception("Impossible de créer le jeu : nombre de lignes/colonnes incorrect");
 		}
@@ -55,8 +75,8 @@ public class Board {
 		for (int i = 0; i < tilesArray.length; i++) {
 			for (int j = 0; j < tilesArray[0].length; j++) {
 				if(tilesArray[i][j] != null) {
-					tilesArray[i][j].setX(j); //attention les i = y, les j = x. On va modifier la valeur des tuiles.
-					tilesArray[i][j].setY(i);
+					tilesArray[i][j].setGridX(j); //attention les i = y, les j = x. On va modifier la valeur des tuiles.
+					tilesArray[i][j].setGridY(i);
 				}
 			}
 		}
@@ -104,16 +124,16 @@ public class Board {
 		Color dynamic_color = Color.black;
 		switch (switchcolor) {
 		case 0:
-			dynamic_color = Color.blue;
+			dynamic_color = Color.decode("#8cb8ff");
 			break;
 		case 1:
-			dynamic_color = Color.green;
+			dynamic_color = Color.decode("#8cd898");
 			break;
 		case 2:
-			dynamic_color = Color.red;
+			dynamic_color = Color.decode("#d88d8c");
 			break;
 		case 3:
-			dynamic_color = Color.yellow;
+			dynamic_color = Color.decode("#fffd9e");
 		default:
 			break;
 		}
@@ -122,9 +142,7 @@ public class Board {
 
 	//enregistre les tuiles sélectionnées par l'utilisateur dans un tableau comportant 2 tuiles
 
-	public void delete(Tile tuileadetruire) {
-		tilesArray[tuileadetruire.getY()][tuileadetruire.getX()] = null;
-	}
+	
 
 	public void collapse() {
 
@@ -132,10 +150,10 @@ public class Board {
 		for (int j = 0; j <= NB_COLUMNS - 1; j++) { // on parcours chaque colonne
 			for (int i = NB_LINES - 1; i >= 1 ; i--) { // on parcours chaque lignes de la fin jusqu'au début + 1
 
-				if(tilesArray[i][j]==null) { // si une tuille dans la colonne est vide il va y avoir un écroullement
+				if(tilesArray[i][j].isDeleted()) { // si une tuille dans la colonne est vide il va y avoir un écroullement
 					// nous allons calculer l'écart de l'écoulement
 					int k = i - 1; // k est l'indice de la tuile qui va s'écrouler, on l'initialise à la tuile juste au dessus
-					while (k > 0 && tilesArray[k][j] == null) { // si la tuile à l'indice k est aussi détruite
+					while (k > 0 && tilesArray[k][j].isDeleted()) { // si la tuile à l'indice k est aussi détruite
 						k--; // on prends la tuile encore au dessus
 					}
 					swapTilesMatrix(tilesArray, i, j, k, j); // on swap la tuile actuel avec celle à l'indice ligne k
@@ -146,9 +164,9 @@ public class Board {
 		// Décalage des colonnes
 		for (int j = 0; j <= NB_COLUMNS - 2; j++) { // on parcours chaque colonnes du début jusqu'à la fin - 1
 
-			if (tilesArray[NB_LINES - 1][j] == null) { // si une colonne est vide il va y avoir un décalage de colonne
+			if (tilesArray[NB_LINES - 1][j].isDeleted()) { // si une colonne est vide il va y avoir un décalage de colonne
 				int k = j+1; // k est l'indice de la tuile de la colonne qui va décaler, on l'initialise à la colonne juste à gauche
-				while (k < NB_COLUMNS - 1 && tilesArray[NB_LINES - 1][k] == null) { // si la colonne à l'indice k est aussi détruite
+				while (k < NB_COLUMNS - 1 && tilesArray[NB_LINES - 1][k].isDeleted()) { // si la colonne à l'indice k est aussi détruite
 					k++; // on prends la colonne encore à gauche
 				}
 				for (int l = 0; l <= NB_LINES-1; l++) {  // pour chaque ligne dans la colonne
@@ -159,25 +177,36 @@ public class Board {
 		setAllcoordinates();//remet les bonnes coordonnees pour chaque tuile (x et y). 
 	}
 
-	public void actionOnSelectedTiles(Tile a, Tile b) {
-		if (a.equals(b) && a.isNear(b) && (a != b)){//on compare les adresses pour savoir si l'utilisateur n'a pas sélectionné la même tuile deux fois
-			delete(a);
-			delete(b);
+	public boolean actionOnSelectedTiles(Tile a, Tile b) {
+		if (a.equals(b) && a.isNear(b) && (a != b) && !(a.isDeleted() || b.isDeleted())){//on compare les adresses pour savoir si l'utilisateur n'a pas sélectionné la même tuile deux fois
+			a.delete();
+			b.delete();
 			System.out.println("tuiles détruites");
+			collapse(); // on modifie le tableau
+			return true;
 		}
 		else{
+			
 			System.out.println("ça a pas marché");
+			return false;
 		}
 	}
 
 	//si la dernière ligne de la première colonne est nulle ça signifie qu'on a gagné!
 	public boolean isFinished() {
-		if(tilesArray[NB_LINES-1][0] != null) { 
+		if(tilesArray[NB_LINES-1][0].isDeleted()==false) { 
 			return false;
 		}
 		return true;
 	}
 
+	public Tile getTileSelected() {
+		return tileSelected;
+	}
+	
+	public void setTileSelected(Tile tileSelected) {
+		this.tileSelected = tileSelected;
+	}
 
-
+	
 }
