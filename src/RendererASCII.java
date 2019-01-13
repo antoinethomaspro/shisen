@@ -30,7 +30,7 @@ public class RendererASCII {
 			ordonnees[i]= (char)(65 + i); //nécessite de cast les int en char
 
 		}
-		//idem abscisse
+		//idem abscisses
 		for (int i = 0; i < Board.NB_COLUMNS; i++) {
 			abscisses[i]= i;
 		}
@@ -62,17 +62,17 @@ public class RendererASCII {
 
 				String color =  ANSI_WHITE; //on affiche un 0 blanc si une tuile a été détruite auparavant
 
-				if(tileToDisplay != null) {
-					if(tileToDisplay.getColor() == Color.blue) {
+				if(tileToDisplay.isDeleted() == false) {
+					if(tileToDisplay.getColor().equals(Color.decode(Board.BLUE))) {
 						color = ANSI_BLUE;
 					}
-					if(tileToDisplay.getColor() == Color.red) {
+					if(tileToDisplay.getColor().equals(Color.decode(Board.RED))) {
 						color = ANSI_RED;
 					}
-					if(tileToDisplay.getColor() == Color.yellow) {
+					if(tileToDisplay.getColor().equals(Color.decode(Board.YELLOW))) {
 						color = ANSI_YELLOW;
 					}
-					if(tileToDisplay.getColor() == Color.green) {
+					if(tileToDisplay.getColor().equals(Color.decode(Board.GREEN))) {
 						color = ANSI_GREEN;
 					}
 				}
@@ -83,12 +83,16 @@ public class RendererASCII {
 
 	}
 
+	
 	//traduit ce que l'utilisateur entre en un tableau de deux éléments
 	//ce qui ressort de la méthode c'est l'index de tilesarray
 	public Tile readAction() {
+		try {
 		System.out.println("veuillez sélectionner tuile ex: A2");
 		String saisie = sc.nextLine();//récupère A2
+		
 		char lettre = saisie.charAt(0);
+		
 		int chiffre = Integer.parseInt(saisie.substring(1));
 		if(lettre < 65 || lettre >65 + Board.NB_LINES) {
 			System.out.println("lettre non comprise entre A et "+ (char)(65+ Board.NB_LINES));//throw new : retourne une nouvelle exception. arrête l'action en affichant un message
@@ -106,7 +110,12 @@ public class RendererASCII {
 			return readAction(); //relance la saisie si la tuile est inexistante.
 		}
 		return selectedTile;
-
+		}
+		catch (Exception e) {
+			System.out.println("problème1");
+			return readAction();	
+		}
+		
 
 	}
 }

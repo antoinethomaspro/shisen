@@ -7,7 +7,7 @@ public class ShisenGame {
 
 
 	public static void main(String[] args) {
-
+//! tableau à agrandir
 		//playWithASCII();
 		playWithSwing();
 		

@@ -16,30 +16,26 @@ public class Board  {
 	Tile tilesArray[][];
 
 	String etape;
-	//paramétrable
+	//paramétrable (lines*columns doit être égal à un multiple de nb sametiles)
 	public final static int NB_LINES = 12;
 	public final static int NB_COLUMNS = 24;
 	public final static int NB_NUMBERS = 9;
 	//non paramétrable
 	public final static int NB_MAXCOLORS = 4;
 	public final static int NB_SAMETILES = 8;
+	public final static String WHITE = "#FFFFFF" ;
+	public final static String BLUE = "#8cb8ff";
+	public final static String GREEN = "#8cd898";
+	public final static String RED = "#d88d8c";
+	public final static String YELLOW = "#fffd9e";
 
 	//nouvel attribut (swing) 
 	private Tile tileSelected;
-
-
 	
-
-	//ce constructeur peut rejeter une exception
-	public Board() throws Exception{
-
+	public Board() {
+		
 		//initialisation de tileSelected
 		this.tileSelected = null;
-
-		if( NB_LINES*NB_COLUMNS%NB_SAMETILES !=0) {
-			throw new Exception("Impossible de créer le jeu : nombre de lignes/colonnes incorrect");
-		}
-
 		this.tilesArray = new Tile[NB_LINES][NB_COLUMNS];
 		this.etape = "en cours";
 	}
@@ -124,16 +120,16 @@ public class Board  {
 		Color dynamic_color = Color.black;
 		switch (switchcolor) {
 		case 0:
-			dynamic_color = Color.decode("#8cb8ff");
+			dynamic_color = Color.decode(BLUE);
 			break;
 		case 1:
-			dynamic_color = Color.decode("#8cd898");
+			dynamic_color = Color.decode(GREEN);
 			break;
 		case 2:
-			dynamic_color = Color.decode("#d88d8c");
+			dynamic_color = Color.decode(RED);
 			break;
 		case 3:
-			dynamic_color = Color.decode("#fffd9e");
+			dynamic_color = Color.decode(YELLOW);
 		default:
 			break;
 		}
