@@ -24,7 +24,7 @@ public class RendererSwing extends JFrame implements MouseListener {
 		this.board = board;
 		zone = new JPanel();
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(700, 700);
+		this.setSize(1000, 1000);
 		this.setLocationRelativeTo(null);
 		this.setLayout(new BorderLayout());
 
@@ -48,7 +48,7 @@ public class RendererSwing extends JFrame implements MouseListener {
 
 	public void draw() {
 
-		zone.removeAll();
+		zone.removeAll();//replace les tuiles dans le bon ordre (on a remodifié toutes les coordonnées des tuiles, donc on les replace au bon endroit)
 
 		Tile[][] tilesArray = board.getTilesArray();
 
@@ -63,18 +63,6 @@ public class RendererSwing extends JFrame implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
-
-		//si c'est le cas on compare tile et la tuile déjà sélectionnée, puis on remet tileSelected à null. 
-		//si ce n'est pas le cas alors on set tileSelected à la valeur de tile et on fait tile.setborder
-
-		//devoir
-		//quand on supprime ça marche pas. voir collapse. Elles sont mises à nulles mais restent afficher. Soit 
-		//debug, voir si les tuiles dans tilesarray sont bien à nulles. 
-		//Problème d'affichage? 
-		//Si elles sont bien à nulles et problème d'affichage persistant, va falloir les détruire, changer les attributs (is delete). 
-
-
 
 	}
 
@@ -86,7 +74,6 @@ public class RendererSwing extends JFrame implements MouseListener {
 		//on veut savoir si il y a déjà une tuile de sélectionnée. 
 		//si c'est la même tuile qu'on a déjà sélectionné, on met tileSelected à null et on enlève le setborder. 
 		if (!tile.isDeleted()) {
-
 
 			if(board.getTileSelected()==null) {
 				board.setTileSelected(tile);
@@ -112,7 +99,7 @@ public class RendererSwing extends JFrame implements MouseListener {
 		}
 
 		draw();
-
+//refresh swing
 		revalidate();
 		repaint();
 		zone.updateUI();
