@@ -16,18 +16,18 @@ import javafx.scene.shape.Line;
  * @author Antoine
  *
  */
-public class Tile extends JButton  {
+public class Tile extends JButton  { //JButton car la tuile doit être cliquable 
 
-	private int value;
-	private Color color;
-	private int x;
-	private int y;
-	boolean deleted;
+	private int value;     //valeur de la tuile (1 à 9)
+	private Color color;   //couleur de la tuile
+	private int x;         //positionnement de la tuile (axe des abscisses)
+	private int y;         //positionnement de la tuile (axe des ordonnées)
+	boolean deleted;       //état de la tuile (détruite ou non) 
 	
     
-	public Tile(int value, Color color, int x, int y){
-		super(Integer.toString(value));
-		Font police = new Font("Tahoma", Font.BOLD, 16);
+	public Tile(int value, Color color, int x, int y){ //constructeur
+		super(Integer.toString(value));                //tostring car super demande un string
+		Font police = new Font("Tahoma", Font.BOLD, 16); 
 		this.setFont(police);
 		this.setBackground(color);
 		this.setBorder(new LineBorder(Color.BLACK, 1));
@@ -37,21 +37,10 @@ public class Tile extends JButton  {
 		this.color = color;
 		this.x = x;
 		this.y = y;
-		
-		
-		//boolean  : quselectand on clique sur une tuile ça change le boolean select. 
-		//déselectionne si on clique sur une autre tuile, impossibilité de sélectionner plusieurs tuiles...
-		//méthode getselected tiles pour savoir le nombre de tuile sélectionnées. 
-		
-
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
 	
+	}
 
-	public int getGridX() {
+	public int getGridX() { //NB : on a renommé getX en getGridX car c'était une méthode déjà utilisé dans JComponent et donc conflit (GRID = coordonnées en Anglais).
 		return x;
 	}
 
@@ -59,7 +48,7 @@ public class Tile extends JButton  {
 		this.x = x;
 	}
 
-	public int getGridY() { //on a renommé getX en getGridX car c'était une méthode déjà utilisé dans JComponent
+	public int getGridY() { 
 		return y;
 	}
 
@@ -83,8 +72,12 @@ public class Tile extends JButton  {
 		return this.color;
 	}
 
-	//méthode comparer les tuiles sélectionnées : les tuiles doivent être identiques
-	public boolean equals(Object a) {
+	public boolean isDeleted() {
+		return deleted;
+	}
+	
+	//méthode equals pour comparer les tuiles sélectionnées : les tuiles doivent être identiques
+	public boolean equals(Object a) { //on vérifie que l'object est bien une tuile
 		if (a == null) { //convention au cas où il y a un pb
 			return false;
 		}
@@ -92,7 +85,7 @@ public class Tile extends JButton  {
 			return false;
 		}
 
-		if (((Tile) a).getValue()==(this.value) && //this.value = valeur de x a.getValue : valeur de y
+		if (((Tile) a).getValue()==(this.value) && //this.value = valeur de x a.getValue : valeur de y ???
 				((Tile) a).getColor().equals(this.color)) {
 			return true;
 		}
@@ -111,12 +104,13 @@ public class Tile extends JButton  {
 
 	}
 
-	public void delete() {
+	public void delete() { //méthode qui "détruit" la tuile à l'aide des méthode repaint et revalidate
 		setBackground(Color.WHITE);
 		setText("");
 		deleted = true;
-		repaint();
-		revalidate();
+		//refresh swing
+		repaint(); 
+		revalidate(); 
 		
 	}
 	
@@ -127,6 +121,4 @@ public class Tile extends JButton  {
 	public void deselect() {
 		setBorder(new LineBorder(Color.BLACK, 1));
 	}
-
-
 }
